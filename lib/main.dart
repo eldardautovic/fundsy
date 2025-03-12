@@ -8,10 +8,10 @@ int? initScreen;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   SharedPreferences prefs = await SharedPreferences.getInstance();
   initScreen = await prefs.getInt("initScreen");
   await prefs.setInt("initScreen", 1);
-  print('initScreen ${initScreen}');
 
   runApp(const MyApp());
 }
@@ -39,6 +39,6 @@ class MyApp extends StatelessWidget {
   }
 
   String getInitialPage() => initScreen == 0 || initScreen == null
-      ? AppRoutes.home
-      : AppRoutes.onBoarding;
+      ? AppRoutes.onBoarding
+      : AppRoutes.home;
 }

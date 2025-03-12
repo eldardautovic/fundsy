@@ -11,7 +11,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Text("Onboarding this"),
+      body: Text(
+        "Onboarding this",
+        style: TextStyle(color: Colors.white, fontSize: 20),
+      ),
     );
   }
 }
