@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:fundsy/routes/route_generator.dart';
 import 'package:fundsy/routes/routes.dart';
-import 'package:fundsy/screens/home_screen.dart';
 import 'package:fundsy/utils/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,6 +30,7 @@ class MyApp extends StatelessWidget {
         title: 'Fundsy',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
+          hoverColor: Colors.transparent,
           colorScheme: ColorScheme.fromSeed(
             seedColor: primaryColor,
             primary: primaryColor,

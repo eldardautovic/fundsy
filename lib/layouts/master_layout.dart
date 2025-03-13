@@ -26,7 +26,8 @@ class _MasterLayoutState extends State<MasterLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: _screens[_currentIndex],
+        body: Container(
+            margin: EdgeInsets.all(24), child: _screens[_currentIndex]),
         bottomNavigationBar: Theme(
           data: Theme.of(context).copyWith(
             canvasColor: secondaryColor,
