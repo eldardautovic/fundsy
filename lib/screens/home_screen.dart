@@ -10,11 +10,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Text(
-        "Home this",
-        style: TextStyle(color: Colors.white, fontSize: 20),
-      ),
+    return Column(
+      children: [
+        Text(
+          "Home screen",
+        )
+      ],
     );
   }
 }

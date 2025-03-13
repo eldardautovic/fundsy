@@ -3,7 +3,6 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:fundsy/routes/route_generator.dart';
 import 'package:fundsy/routes/routes.dart';
 import 'package:fundsy/screens/home_screen.dart';
-import 'package:fundsy/screens/onboarding_screen.dart';
 import 'package:fundsy/utils/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -30,14 +29,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Fundsy',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          fontFamily: "Inter",
           colorScheme: ColorScheme.fromSeed(
             seedColor: primaryColor,
             primary: primaryColor,
             secondary: secondaryColor,
             surface: backgroundColor,
           ),
+          textTheme: Theme.of(context).textTheme.apply(
+                bodyColor: textColor,
+                displayColor: textColor,
+                fontFamily: "Inter",
+              ),
           useMaterial3: true,
         ),
         initialRoute: getInitialPage(),
