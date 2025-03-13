@@ -88,6 +88,16 @@ class _TransactionItemState extends State<TransactionItem> {
                   shape: const CircleBorder(),
                   checkColor: secondaryColor,
                   value: completed,
+                  side: BorderSide(width: 0),
+                  fillColor: WidgetStateColor.resolveWith(
+                    (states) {
+                      if (states.contains(WidgetState.selected)) {
+                        return primaryColor;
+                      }
+                      return secondaryColor;
+                    },
+                  ),
+                  activeColor: primaryColor,
                   onChanged: (value) {
                     setState(() {
                       completed = value ?? false;
