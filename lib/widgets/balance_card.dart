@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-
+import 'package:fundsy/routes/routes.dart';
 import '../utils/colors.dart';
 
 class BalanceCard extends StatelessWidget {
-  const BalanceCard({super.key});
+  double balance;
+  BalanceCard({super.key, required this.balance});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,7 @@ class BalanceCard extends StatelessWidget {
               height: 16,
             ),
             Text(
-              "\$3,200.00",
+              "\$$balance",
               style: TextStyle(
                   fontSize: 36,
                   fontWeight: FontWeight.w900,
@@ -39,7 +40,9 @@ class BalanceCard extends StatelessWidget {
               height: 8,
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, AppRoutes.wallet);
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: backgroundColor,
                 textStyle: TextStyle(color: textColor),

@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import '../utils/colors.dart';
 
 class AvailableBalanceDay extends StatelessWidget {
-  const AvailableBalanceDay({super.key});
+  double balancePerDay;
+  AvailableBalanceDay({super.key, required this.balancePerDay});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +38,7 @@ class AvailableBalanceDay extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                "\$10.04/\$14.24",
+                "\$10.04/\$${balancePerDay.toStringAsFixed(2)}",
                 textAlign: TextAlign.right,
                 style: TextStyle(
                     fontFamily: "Bassa",
