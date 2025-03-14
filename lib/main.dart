@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:fundsy/database/database.dart';
@@ -8,15 +6,12 @@ import 'package:fundsy/providers/user_provider.dart';
 import 'package:fundsy/routes/route_generator.dart';
 import 'package:fundsy/routes/routes.dart';
 import 'package:fundsy/utils/colors.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:path/path.dart' as p;
 
 int? initScreen;
 
-late Database? db;
+Store? db;
 
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -27,20 +22,7 @@ Future<void> main() async {
   initScreen = await prefs.getInt("initScreen");
   await prefs.setInt("initScreen", 1);
 
-  if (Platform.isWindows || Platform.isLinux) {
-    sqfliteFfiInit();
-  }
-
-  databaseFactory = databaseFactoryFfi;
-
-  final Directory appDocumentsDir = await getApplicationDocumentsDirectory();
-
-  String dbPath = p.join(appDocumentsDir.path, "databases", "fundsy_db.db");
-  db = await databaseFactory.openDatabase(
-    dbPath,
-  );
-
-  await initTables();
+  db = Store();
 
   FlutterNativeSplash.remove();
 

@@ -1,40 +1,66 @@
-import 'package:fundsy/main.dart';
+import 'dart:io';
+
 import 'package:fundsy/models/user.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+
+import 'package:path/path.dart' as p;
 
 final user = User();
 
-Future<void> initTables() async {
-  await db?.execute('''
-  CREATE TABLE IF NOT EXISTS User (
-    id INTEGER PRIMARY KEY,
-    balance DOUBLE
-  )
-  ''');
+class Store {
+  Database? database;
 
-  var result = await db?.query("User");
-
-  if (result!.isEmpty) {
-    await db?.insert("User", {"balance": 0.0});
-  } else {
-    user.id = result[0]['id'] as int;
-    user.setBalance(result[0]['balance'] as double);
+  Store() {
+    initTables();
   }
 
-  await db?.execute('''
-  CREATE TABLE IF NOT EXISTS Transactions (
-    id INTEGER PRIMARY KEY,
-    balance DOUBLE,
-    created_at TEXT,
-    category TEXT
-  )
-  ''');
+  Future<void> initTables() async {
+    if (Platform.isWindows || Platform.isLinux) {
+      sqfliteFfiInit();
+    }
 
-  await db?.execute('''
-  CREATE TABLE IF NOT EXISTS Bills (
-    id INTEGER PRIMARY KEY,
-    cost DOUBLE,
-    name TEXT
-    created_at TEXT
-  )
-  ''');
+    databaseFactory = databaseFactoryFfi;
+
+    final Directory appDocumentsDir = await getApplicationDocumentsDirectory();
+
+    String dbPath = p.join(appDocumentsDir.path, "databases", "fundsy_db.db");
+    database = await databaseFactory.openDatabase(
+      dbPath,
+    );
+
+    await database!.execute('''
+      CREATE TABLE IF NOT EXISTS User (
+        id INTEGER PRIMARY KEY,
+        balance DOUBLE
+      )
+    ''');
+
+    var result = await database!.query("User");
+
+    if (result!.isEmpty) {
+      await database!.insert("User", {"balance": 0.0});
+    } else {
+      user.id = result[0]['id'] as int;
+      user.setBalance(result[0]['balance'] as double);
+    }
+
+    await database!.execute('''
+      CREATE TABLE IF NOT EXISTS Transactions (
+        id INTEGER PRIMARY KEY,
+        balance DOUBLE,
+        created_at TEXT,
+        category TEXT
+      )
+    ''');
+
+    await database!.execute('''
+      CREATE TABLE IF NOT EXISTS Bills (
+        id INTEGER PRIMARY KEY,
+        cost DOUBLE,
+        name TEXT,
+        created_at TEXT
+      )
+    ''');
+  }
 }

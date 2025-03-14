@@ -7,18 +7,14 @@ final String columnBalance = 'balance';
 
 class UserProvider {
   Future<User> insert(User user) async {
-    user.id = await db!.insert(tableUser, user.toMap());
+    user.id = await db!.database!.insert(tableUser, user.toMap());
     return user;
   }
 
-  Future<int> delete(int id) async {
-    return await db!.delete(tableUser, where: '$columnId = ?', whereArgs: [id]);
-  }
-
   Future<int> update(User user) async {
-    return await db!.update(tableUser, user.toMap(),
+    return await db!.database!.update(tableUser, user.toMap(),
         where: '$columnId = ?', whereArgs: [user.id]);
   }
 
-  Future close() async => db!.close();
+  Future close() async => db!.database!.close();
 }
