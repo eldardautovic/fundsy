@@ -5,6 +5,9 @@ import 'package:fundsy/screens/home_screen.dart';
 import 'package:fundsy/screens/profile_screen.dart';
 import 'package:fundsy/screens/wallet_screen.dart';
 import 'package:fundsy/utils/colors.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/navigation_provider.dart';
 
 class MasterLayout extends StatefulWidget {
   const MasterLayout({super.key});
@@ -14,7 +17,6 @@ class MasterLayout extends StatefulWidget {
 }
 
 class _MasterLayoutState extends State<MasterLayout> {
-  int _currentIndex = 0;
   final List<Widget> _screens = [
     HomeScreen(),
     BillsScreen(),
@@ -25,9 +27,12 @@ class _MasterLayoutState extends State<MasterLayout> {
 
   @override
   Widget build(BuildContext context) {
+    final navigationProvider = Provider.of<NavigationProvider>(context);
+
     return Scaffold(
         body: Container(
-            margin: EdgeInsets.all(24), child: _screens[_currentIndex]),
+            margin: EdgeInsets.all(24),
+            child: _screens[navigationProvider.currentIndex]),
         bottomNavigationBar: Theme(
           data: Theme.of(context).copyWith(
             canvasColor: secondaryColor,
@@ -42,49 +47,35 @@ class _MasterLayoutState extends State<MasterLayout> {
             type: BottomNavigationBarType.fixed,
             selectedLabelStyle: TextStyle(color: textColor),
             unselectedLabelStyle: TextStyle(color: textColor),
-            currentIndex: _currentIndex,
-            onTap: (index) {
-              setState(() {
-                _currentIndex = index;
-              });
-            },
-            items: _buildNavItems(),
+            currentIndex: navigationProvider.currentIndex,
+            onTap: (index) => navigationProvider.setCurrentIndex(index),
+            items: _buildNavItems(navigationProvider.currentIndex),
           ),
         ));
   }
 
-  List<BottomNavigationBarItem> _buildNavItems() {
+  List<BottomNavigationBarItem> _buildNavItems(int currentIndex) {
     return [
+      BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: 'Home'),
       BottomNavigationBarItem(
-        icon: Icon(Icons.home_rounded),
-        label: 'Home',
-      ),
+          icon: Icon(Icons.receipt_rounded), label: 'Bills'),
       BottomNavigationBarItem(
-        icon: Icon(Icons.receipt_rounded),
-        label: 'Bills',
-      ),
-      BottomNavigationBarItem(
-          icon: Container(
-            decoration: BoxDecoration(
-                color: _currentIndex == 2 ? primaryColor : textColor,
-                borderRadius: BorderRadius.circular(100)),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Icon(
-                Icons.shopping_bag_rounded,
-                color: backgroundColor,
-              ),
-            ),
+        icon: Container(
+          decoration: BoxDecoration(
+            color: currentIndex == 2 ? primaryColor : textColor,
+            borderRadius: BorderRadius.circular(100),
           ),
-          label: ""),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.account_balance_wallet_rounded),
-        label: 'Wallet',
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Icon(Icons.shopping_bag_rounded, color: backgroundColor),
+          ),
+        ),
+        label: "",
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.person_rounded),
-        label: 'Profile',
-      ),
+          icon: Icon(Icons.account_balance_wallet_rounded), label: 'Wallet'),
+      BottomNavigationBarItem(
+          icon: Icon(Icons.person_rounded), label: 'Profile'),
     ];
   }
 }
