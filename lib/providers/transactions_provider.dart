@@ -37,23 +37,19 @@ class TransactionProvider {
     return resultSet;
   }
 
-  Future<List<Transaction>> getDailyTransactions() async {
+  Future<double> getDailyTransactions() async {
     String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
-    List<Map<String, Object?>> maps = await db!.database!.query(
-        tableTransaction,
-        columns: [columnId, columnBalance, columnCategory, columnCreatedAt],
-        orderBy: '$columnCreatedAt DESC',
-        where: "date($columnCreatedAt) = ?",
-        whereArgs: [today]);
+    var total = await db!.database!.rawQuery('''
+      SELECT SUM(balance) as total 
+      FROM Transactions
+      WHERE date($columnCreatedAt) = ?
+      ORDER BY $columnCreatedAt DESC
+    ''', [today]);
 
-    List<Transaction> resultSet = [];
+    double spentToday = double.parse(total[0]['total'].toString());
 
-    for (var transact in maps) {
-      resultSet.add(Transaction.fromMap(transact));
-    }
-
-    return resultSet;
+    return spentToday;
   }
 
   Future close() async => db!.database!.close();

@@ -54,12 +54,6 @@ class Store {
       )
     ''');
 
-    await database!.insert("Transactions", {
-      "balance": 5.0,
-      "created_at": DateTime.now().toIso8601String(),
-      "category": "Eating out"
-    });
-
     await database!.execute('''
       CREATE TABLE IF NOT EXISTS Bills (
         id INTEGER PRIMARY KEY,

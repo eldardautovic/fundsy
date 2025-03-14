@@ -16,6 +16,8 @@ class _AvailableBalanceDayState extends State<AvailableBalanceDay> {
   late double _spendAmount = 0.0;
   late TransactionProvider _transactionProvider;
 
+  bool isLoading = true;
+
   @override
   void initState() {
     super.initState();
@@ -26,13 +28,11 @@ class _AvailableBalanceDayState extends State<AvailableBalanceDay> {
   }
 
   Future<void> calculateDailySpending() async {
-    var dailyTransactions = await _transactionProvider.getDailyTransactions();
+    _spendAmount = await _transactionProvider.getDailyTransactions();
 
-    for (var transaction in dailyTransactions) {
-      _spendAmount += transaction.balance;
-    }
-
-    setState(() {});
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -53,7 +53,9 @@ class _AvailableBalanceDayState extends State<AvailableBalanceDay> {
             height: 15,
             child: Positioned.fill(
               child: LinearProgressIndicator(
-                value: _spendAmount / widget.balancePerDay,
+                value: (widget.balancePerDay > 0.0 && _spendAmount > 0.0)
+                    ? _spendAmount / widget.balancePerDay
+                    : 0.0,
                 color: primaryColor,
                 backgroundColor: secondaryColor,
                 borderRadius: BorderRadius.circular(100),
