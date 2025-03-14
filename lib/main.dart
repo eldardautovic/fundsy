@@ -23,6 +23,7 @@ Future<void> main() async {
   initScreen = await prefs.getInt("initScreen");
   await prefs.setInt("initScreen", 1);
 
+  //Initializing global database object
   db = Store();
 
   FlutterNativeSplash.remove();

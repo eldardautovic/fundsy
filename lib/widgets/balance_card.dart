@@ -5,8 +5,8 @@ import '../providers/navigation_provider.dart';
 import '../utils/colors.dart';
 
 class BalanceCard extends StatelessWidget {
-  double balance;
-  BalanceCard({super.key, required this.balance});
+  final double balance;
+  const BalanceCard({super.key, required this.balance});
 
   @override
   Widget build(BuildContext context) {

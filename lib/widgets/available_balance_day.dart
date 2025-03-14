@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../utils/colors.dart';
 
 class AvailableBalanceDay extends StatelessWidget {
-  double balancePerDay;
-  AvailableBalanceDay({super.key, required this.balancePerDay});
+  final double balancePerDay;
+  const AvailableBalanceDay({super.key, required this.balancePerDay});
 
   @override
   Widget build(BuildContext context) {

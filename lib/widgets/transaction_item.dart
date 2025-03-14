@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import '../utils/colors.dart';
 
 class TransactionItem extends StatefulWidget {
-  bool checkable;
+  final bool checkable;
 
-  TransactionItem({super.key, this.checkable = false});
+  const TransactionItem({super.key, this.checkable = false});
 
   @override
   State<TransactionItem> createState() => _TransactionItemState();
