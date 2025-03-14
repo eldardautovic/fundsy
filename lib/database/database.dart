@@ -38,7 +38,7 @@ class Store {
 
     var result = await database!.query("User");
 
-    if (result!.isEmpty) {
+    if (result.isEmpty) {
       await database!.insert("User", {"balance": 0.0});
     } else {
       user.id = result[0]['id'] as int;
@@ -53,6 +53,12 @@ class Store {
         category TEXT
       )
     ''');
+
+    await database!.insert("Transactions", {
+      "balance": 5.0,
+      "created_at": DateTime.now().toIso8601String(),
+      "category": "Eating out"
+    });
 
     await database!.execute('''
       CREATE TABLE IF NOT EXISTS Bills (

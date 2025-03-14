@@ -1,10 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:fundsy/providers/transactions_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../utils/colors.dart';
 
-class AvailableBalanceDay extends StatelessWidget {
+class AvailableBalanceDay extends StatefulWidget {
   final double balancePerDay;
   const AvailableBalanceDay({super.key, required this.balancePerDay});
+
+  @override
+  State<AvailableBalanceDay> createState() => _AvailableBalanceDayState();
+}
+
+class _AvailableBalanceDayState extends State<AvailableBalanceDay> {
+  late double _spendAmount = 0.0;
+  late TransactionProvider _transactionProvider;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _transactionProvider = context.read<TransactionProvider>();
+
+    calculateDailySpending();
+  }
+
+  Future<void> calculateDailySpending() async {
+    var dailyTransactions = await _transactionProvider.getDailyTransactions();
+
+    for (var transaction in dailyTransactions) {
+      _spendAmount += transaction.balance;
+    }
+
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +53,7 @@ class AvailableBalanceDay extends StatelessWidget {
             height: 15,
             child: Positioned.fill(
               child: LinearProgressIndicator(
-                value: 0.7,
+                value: _spendAmount / widget.balancePerDay,
                 color: primaryColor,
                 backgroundColor: secondaryColor,
                 borderRadius: BorderRadius.circular(100),
@@ -38,7 +67,7 @@ class AvailableBalanceDay extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                "\$10.04/\$${balancePerDay.toStringAsFixed(2)}",
+                "\$$_spendAmount/\$${widget.balancePerDay.toStringAsFixed(2)}",
                 textAlign: TextAlign.right,
                 style: TextStyle(
                     fontFamily: "Bassa",

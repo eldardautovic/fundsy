@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:fundsy/models/transaction.dart';
+import 'package:intl/intl.dart';
 
 import '../utils/colors.dart';
 
 class TransactionItem extends StatefulWidget {
   final bool checkable;
+  final Transaction transaction;
 
-  const TransactionItem({super.key, this.checkable = false});
+  const TransactionItem(
+      {super.key, this.checkable = false, required this.transaction});
 
   @override
   State<TransactionItem> createState() => _TransactionItemState();
@@ -39,7 +43,7 @@ class _TransactionItemState extends State<TransactionItem> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Eating out",
+                    widget.transaction.category,
                     style: TextStyle(
                         fontFamily: "Bassa",
                         fontSize: 13,
@@ -51,7 +55,8 @@ class _TransactionItemState extends State<TransactionItem> {
                         decorationColor: textColor),
                   ),
                   Text(
-                    "March 12, 09:20 AM",
+                    DateFormat('MMMM dd, hh:mm a')
+                        .format(widget.transaction.createdAt),
                     style: TextStyle(
                         fontFamily: "Bassa",
                         fontSize: 13,
@@ -72,7 +77,7 @@ class _TransactionItemState extends State<TransactionItem> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "-\$20.00",
+                "-\$${widget.transaction.balance.toStringAsFixed(2)}",
                 style: TextStyle(
                     fontFamily: "Bassa",
                     fontSize: 13,

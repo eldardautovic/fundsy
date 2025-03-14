@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fundsy/utils/colors.dart';
 import 'package:fundsy/widgets/remaining_bills.dart';
-import 'package:fundsy/widgets/transaction_item.dart';
 
 import '../widgets/header_widget.dart';
 
@@ -50,11 +49,7 @@ class _BillsScreenState extends State<BillsScreen> {
     return Container(
       margin: EdgeInsets.only(top: 20),
       child: Column(
-        children: [
-          TransactionItem(checkable: true),
-          TransactionItem(checkable: true),
-          TransactionItem(checkable: true)
-        ],
+        children: [],
       ),
     );
   }

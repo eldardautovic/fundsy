@@ -1,0 +1,60 @@
+import 'package:fundsy/main.dart';
+import 'package:fundsy/models/transaction.dart';
+import 'package:intl/intl.dart';
+
+final String tableTransaction = 'Transactions';
+final String columnId = 'id';
+final String columnBalance = 'balance';
+final String columnCreatedAt = 'created_at';
+final String columnCategory = 'category';
+
+class TransactionProvider {
+  Future<Transaction> insert(Transaction transaction) async {
+    transaction.id =
+        await db!.database!.insert(tableTransaction, transaction.toMap());
+    return transaction;
+  }
+
+  Future<int> update(Transaction transaction) async {
+    return await db!.database!.update(tableTransaction, transaction.toMap(),
+        where: '$columnId = ?', whereArgs: [transaction.id]);
+  }
+
+  Future<List<Transaction>> getTransactions() async {
+    List<Map<String, Object?>> maps = await db!.database!.query(
+      tableTransaction,
+      columns: [columnId, columnBalance, columnCategory, columnCreatedAt],
+      limit: 4,
+      orderBy: '$columnCreatedAt DESC',
+    );
+
+    List<Transaction> resultSet = [];
+
+    for (var transact in maps) {
+      resultSet.add(Transaction.fromMap(transact));
+    }
+
+    return resultSet;
+  }
+
+  Future<List<Transaction>> getDailyTransactions() async {
+    String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
+    List<Map<String, Object?>> maps = await db!.database!.query(
+        tableTransaction,
+        columns: [columnId, columnBalance, columnCategory, columnCreatedAt],
+        orderBy: '$columnCreatedAt DESC',
+        where: "date($columnCreatedAt) = ?",
+        whereArgs: [today]);
+
+    List<Transaction> resultSet = [];
+
+    for (var transact in maps) {
+      resultSet.add(Transaction.fromMap(transact));
+    }
+
+    return resultSet;
+  }
+
+  Future close() async => db!.database!.close();
+}

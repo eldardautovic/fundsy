@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fundsy/models/transaction.dart';
+import 'package:fundsy/providers/transactions_provider.dart';
 import 'package:fundsy/widgets/transaction_item.dart';
+import 'package:provider/provider.dart';
 
 import '../utils/colors.dart';
 
@@ -11,6 +14,29 @@ class TransactionLogs extends StatefulWidget {
 }
 
 class _TransactionLogsState extends State<TransactionLogs> {
+  late TransactionProvider _transactionProvider;
+
+  late List<Transaction> _list;
+
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _transactionProvider = context.read<TransactionProvider>();
+
+    initLogs();
+  }
+
+  Future<void> initLogs() async {
+    _list = await _transactionProvider.getTransactions();
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -44,10 +70,12 @@ class _TransactionLogsState extends State<TransactionLogs> {
           SizedBox(
             height: 20,
           ),
-          TransactionItem(),
-          TransactionItem(),
-          TransactionItem(),
-          TransactionItem(),
+          if (!isLoading) ...[
+            ..._list.map((transact) => TransactionItem(
+                  transaction: transact,
+                  checkable: false,
+                ))
+          ]
         ],
       ),
     );
