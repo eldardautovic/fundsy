@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fundsy/models/bill.dart';
+import 'package:fundsy/providers/bills_provider.dart';
 import 'package:fundsy/utils/colors.dart';
 import 'package:fundsy/widgets/remaining_bills.dart';
+import 'package:fundsy/widgets/transaction_item.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/header_widget.dart';
 
@@ -12,15 +16,47 @@ class BillsScreen extends StatefulWidget {
 }
 
 class _BillsScreenState extends State<BillsScreen> {
+  late BillsProvider _billsProvider;
+
+  late double _leftoverBillsAmount;
+  late List<Bill> _list;
+
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _billsProvider = context.read<BillsProvider>();
+
+    initBills();
+  }
+
+  Future initBills() async {
+    _list = await _billsProvider.getBills();
+    _leftoverBillsAmount = await _billsProvider.getLeftoverBillsAmount();
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (isLoading == true) {
+      return CircularProgressIndicator();
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         HeaderWidget(
             title: "Bills", description: "Overview of your monthly bills"),
         _buildAddBillButton(),
-        RemainingBills(),
+        RemainingBills(
+          leftoverBills: _leftoverBillsAmount,
+        ),
         _buildBills()
       ],
     );
@@ -49,7 +85,14 @@ class _BillsScreenState extends State<BillsScreen> {
     return Container(
       margin: EdgeInsets.only(top: 20),
       child: Column(
-        children: [],
+        children: _list
+            .map(
+              (e) => TransactionItem(
+                item: e,
+                checkable: true,
+              ),
+            )
+            .toList(),
       ),
     );
   }

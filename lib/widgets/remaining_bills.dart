@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import '../utils/colors.dart';
 
 class RemainingBills extends StatelessWidget {
-  const RemainingBills({super.key});
+  final double leftoverBills;
+  const RemainingBills({super.key, required this.leftoverBills});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +40,7 @@ class RemainingBills extends StatelessWidget {
                       fontWeight: FontWeight.w400),
                 ),
                 Text(
-                  "\$20.00",
+                  "\$${leftoverBills.toStringAsFixed(2)}",
                   textAlign: TextAlign.right,
                   style: TextStyle(
                       fontFamily: "Bassa",

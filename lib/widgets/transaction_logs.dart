@@ -81,7 +81,7 @@ class _TransactionLogsState extends State<TransactionLogs> {
     return Column(
       children: [
         ..._list.map((transact) => TransactionItem(
-              transaction: transact,
+              item: transact,
               checkable: false,
             ))
       ],

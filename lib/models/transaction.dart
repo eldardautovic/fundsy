@@ -1,10 +1,12 @@
+import 'package:fundsy/models/financial_item.dart';
+
 final String tableTransaction = 'Transactions';
 final String columnId = 'id';
 final String columnBalance = 'balance';
 final String columnCreatedAt = 'created_at';
 final String columnCategory = 'category';
 
-class Transaction {
+class Transaction extends FinancialItem {
   int id = 0;
   double balance = 0.0;
   DateTime createdAt = DateTime.now();

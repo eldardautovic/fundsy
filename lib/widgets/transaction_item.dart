@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:fundsy/models/transaction.dart';
+import 'package:fundsy/models/financial_item.dart';
 import 'package:intl/intl.dart';
 
 import '../utils/colors.dart';
 
 class TransactionItem extends StatefulWidget {
   final bool checkable;
-  final Transaction transaction;
+  final FinancialItem item;
+  final bool completed;
 
   const TransactionItem(
-      {super.key, this.checkable = false, required this.transaction});
+      {super.key,
+      this.checkable = false,
+      required this.item,
+      this.completed = false});
 
   @override
   State<TransactionItem> createState() => _TransactionItemState();
@@ -17,6 +21,14 @@ class TransactionItem extends StatefulWidget {
 
 class _TransactionItemState extends State<TransactionItem> {
   bool completed = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    completed = widget.completed;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,26 +55,26 @@ class _TransactionItemState extends State<TransactionItem> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.transaction.category,
+                    widget.item.category,
                     style: TextStyle(
                         fontFamily: "Bassa",
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
                         color: textColor,
-                        decoration: completed == true
+                        decoration: completed
                             ? TextDecoration.lineThrough
                             : TextDecoration.none,
                         decorationColor: textColor),
                   ),
                   Text(
                     DateFormat('MMMM dd, hh:mm a')
-                        .format(widget.transaction.createdAt),
+                        .format(widget.item.createdAt),
                     style: TextStyle(
                         fontFamily: "Bassa",
                         fontSize: 13,
                         fontWeight: FontWeight.w400,
                         color: textColor,
-                        decoration: completed == true
+                        decoration: completed
                             ? TextDecoration.lineThrough
                             : TextDecoration.none,
                         decorationColor: textColor),
@@ -77,13 +89,13 @@ class _TransactionItemState extends State<TransactionItem> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "-\$${widget.transaction.balance.toStringAsFixed(2)}",
+                "-\$${widget.item.balance.toStringAsFixed(2)}",
                 style: TextStyle(
                     fontFamily: "Bassa",
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
                     color: textColor,
-                    decoration: completed == true
+                    decoration: completed
                         ? TextDecoration.lineThrough
                         : TextDecoration.none,
                     decorationColor: textColor),
@@ -92,7 +104,7 @@ class _TransactionItemState extends State<TransactionItem> {
                 Checkbox(
                   shape: const CircleBorder(),
                   checkColor: secondaryColor,
-                  value: completed,
+                  value: widget.completed,
                   side: BorderSide(width: 0),
                   fillColor: WidgetStateColor.resolveWith(
                     (states) {

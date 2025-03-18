@@ -55,11 +55,16 @@ class Store {
     ''');
 
     await database!.execute('''
+      DROP TABLE Bills
+    ''');
+
+    await database!.execute('''
       CREATE TABLE IF NOT EXISTS Bills (
         id INTEGER PRIMARY KEY,
-        cost DOUBLE,
-        name TEXT,
-        created_at TEXT
+        balance DOUBLE,
+        category TEXT,
+        created_at TEXT,
+        completed BIT
       )
     ''');
   }

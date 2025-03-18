@@ -1,20 +1,24 @@
+import 'package:fundsy/models/financial_item.dart';
+
 final String tableBill = 'Bills';
 final String columnId = 'id';
-final String columnCost = 'cost';
-final String columnName = 'name';
+final String columnBalance = 'balance';
+final String columnCategory = 'category';
 final String columnCreatedAt = 'created_at';
+final String columnCompleted = 'completed';
 
-class Bill {
+class Bill extends FinancialItem {
   int id = 0;
-  double cost = 0.0;
+  double balance = 0.0;
   DateTime createdAt = DateTime.now();
-  String name = '';
+  String category = '';
+  bool completed = false;
 
   Map<String, Object?> toMap() {
     var map = <String, Object?>{
-      columnCost: cost,
+      columnBalance: balance,
       columnCreatedAt: createdAt,
-      columnName: name
+      columnCategory: category
     };
     // ignore: unnecessary_null_comparison
     if (id != null) {
@@ -27,8 +31,9 @@ class Bill {
 
   Bill.fromMap(Map<String, Object?> map) {
     id = map[columnId] as int;
-    cost = map[columnCost] as double;
+    balance = map[columnBalance] as double;
     createdAt = DateTime.parse(map[columnCreatedAt] as String);
-    name = map[columnName] as String;
+    category = map[columnCategory] as String;
+    completed = map[columnCompleted] as bool;
   }
 }
