@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:fundsy/models/bill.dart';
 import 'package:fundsy/providers/bills_provider.dart';
 import 'package:fundsy/routes/routes.dart';
-import 'package:fundsy/utils/colors.dart';
 import 'package:fundsy/widgets/remaining_bills.dart';
 import 'package:fundsy/widgets/transaction_item.dart';
 import 'package:go_router/go_router.dart';
