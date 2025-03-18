@@ -39,45 +39,52 @@ class _TransactionLogsState extends State<TransactionLogs> {
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading == true || _list.isEmpty) {
+      return SizedBox.shrink();
+    }
+
     return Container(
       margin: EdgeInsets.only(top: 20),
       child: Column(
+        spacing: 20,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                "Transactions",
-                style: TextStyle(
-                    fontFamily: "Bassa",
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500),
-              ),
-              Text(
-                "See all",
-                style: TextStyle(
-                    fontFamily: "Bassa",
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: primaryColor,
-                    decoration: TextDecoration.underline,
-                    decorationColor: primaryColor),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          if (!isLoading) ...[
-            ..._list.map((transact) => TransactionItem(
-                  transaction: transact,
-                  checkable: false,
-                ))
-          ]
-        ],
+        children: [_buildHeader(), _buildTransactions()],
       ),
+    );
+  }
+
+  Widget _buildHeader() {
+    return const Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          "Transactions",
+          style: TextStyle(
+              fontFamily: "Bassa", fontSize: 15, fontWeight: FontWeight.w500),
+        ),
+        Text(
+          "See all",
+          style: TextStyle(
+              fontFamily: "Bassa",
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: primaryColor,
+              decoration: TextDecoration.underline,
+              decorationColor: primaryColor),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTransactions() {
+    return Column(
+      children: [
+        ..._list.map((transact) => TransactionItem(
+              transaction: transact,
+              checkable: false,
+            ))
+      ],
     );
   }
 }

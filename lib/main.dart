@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:fundsy/database/database.dart';
 import 'package:fundsy/models/user.dart';
+import 'package:fundsy/providers/bills_provider.dart';
 import 'package:fundsy/providers/navigation_provider.dart';
 import 'package:fundsy/providers/transactions_provider.dart';
 import 'package:fundsy/providers/user_provider.dart';
@@ -37,6 +38,7 @@ Future<void> main() async {
       create: (context) => NavigationProvider(),
     ),
     Provider(create: (context) => UserProvider()),
+    Provider(create: (context) => BillsProvider()),
     Provider(create: (context) => TransactionProvider()),
   ], child: const MyApp()));
 }
