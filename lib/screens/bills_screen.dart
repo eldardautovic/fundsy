@@ -74,10 +74,6 @@ class _BillsScreenState extends State<BillsScreen> {
             onPressed: () {
               context.goNamed(AppRoutes.addBill);
             },
-            style: ElevatedButton.styleFrom(
-                backgroundColor: primaryColor,
-                textStyle: TextStyle(color: backgroundColor),
-                foregroundColor: backgroundColor),
             child: Text("Add bill"),
           ),
         ],
@@ -86,6 +82,12 @@ class _BillsScreenState extends State<BillsScreen> {
   }
 
   Widget _buildBills() {
+    if (isLoading == false && _list.isEmpty) {
+      return Container(
+          margin: EdgeInsets.only(top: 20),
+          child: Text("There is no bills for this month."));
+    }
+
     return Container(
       margin: EdgeInsets.only(top: 20),
       child: Column(

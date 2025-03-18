@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:fundsy/routes/routes.dart';
 import 'package:fundsy/utils/colors.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-
-import '../providers/navigation_provider.dart';
 
 class MasterLayout extends StatefulWidget {
   final StatefulNavigationShell navigationShell;
@@ -18,8 +15,6 @@ class MasterLayout extends StatefulWidget {
 class _MasterLayoutState extends State<MasterLayout> {
   @override
   Widget build(BuildContext context) {
-    final navigationProvider = Provider.of<NavigationProvider>(context);
-
     return Scaffold(
         body: Container(
             margin: EdgeInsets.all(24), child: widget.navigationShell),
@@ -39,12 +34,12 @@ class _MasterLayoutState extends State<MasterLayout> {
             unselectedLabelStyle: TextStyle(color: textColor),
             currentIndex: widget.navigationShell.currentIndex,
             onTap: _onTap,
-            items: _buildNavItems(navigationProvider.currentIndex),
+            items: _buildNavItems(),
           ),
         ));
   }
 
-  List<BottomNavigationBarItem> _buildNavItems(int currentIndex) {
+  List<BottomNavigationBarItem> _buildNavItems() {
     return [
       BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: 'Home'),
       BottomNavigationBarItem(

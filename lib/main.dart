@@ -3,7 +3,6 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:fundsy/database/database.dart';
 import 'package:fundsy/models/user.dart';
 import 'package:fundsy/providers/bills_provider.dart';
-import 'package:fundsy/providers/navigation_provider.dart';
 import 'package:fundsy/providers/transactions_provider.dart';
 import 'package:fundsy/providers/user_provider.dart';
 import 'package:fundsy/routes/route_generator.dart';
@@ -34,9 +33,6 @@ Future<void> main() async {
     ChangeNotifierProvider(
       create: (context) => User(),
     ),
-    ChangeNotifierProvider(
-      create: (context) => NavigationProvider(),
-    ),
     Provider(create: (context) => UserProvider()),
     Provider(create: (context) => BillsProvider()),
     Provider(create: (context) => TransactionProvider()),
@@ -52,6 +48,12 @@ class MyApp extends StatelessWidget {
       title: 'Fundsy',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+                backgroundColor: primaryColor,
+                textStyle:
+                    TextStyle(color: backgroundColor, fontFamily: "Inter"),
+                foregroundColor: backgroundColor)),
         hoverColor: Colors.transparent,
         unselectedWidgetColor: secondaryColor,
         colorScheme: ColorScheme.fromSeed(

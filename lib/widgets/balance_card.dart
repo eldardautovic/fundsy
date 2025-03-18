@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fundsy/routes/routes.dart';
-import 'package:provider/provider.dart';
-import '../providers/navigation_provider.dart';
+import 'package:go_router/go_router.dart';
 import '../utils/colors.dart';
 
 class BalanceCard extends StatelessWidget {
@@ -43,8 +42,7 @@ class BalanceCard extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                Provider.of<NavigationProvider>(context, listen: false)
-                    .setCurrentIndex(AppRoutes.walletIndex);
+                context.go(AppRoutes.wallet);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: backgroundColor,
