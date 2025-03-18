@@ -1,9 +1,15 @@
 class AppRoutes {
   static const onBoarding = '/onboarding';
+
   static const home = '/home';
+
   static const bills = '/bills';
+  static const addBill = 'add';
+
   static const buy = '/buy';
+
   static const wallet = '/wallet';
+
   static const profile = '/profile';
 
   static const homeIndex = 0;
@@ -11,4 +17,5 @@ class AppRoutes {
   static const buyIndex = 2;
   static const walletIndex = 3;
   static const profileIndex = 4;
+  static const billsCreateIndex = 5;
 }

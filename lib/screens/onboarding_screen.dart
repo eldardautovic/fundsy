@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fundsy/routes/routes.dart';
 import 'package:fundsy/utils/colors.dart';
+import 'package:go_router/go_router.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -124,10 +125,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       ElevatedButton(
-                          onPressed: () => {
-                                Navigator.pushReplacementNamed(
-                                    context, AppRoutes.home)
-                              },
+                          onPressed: () => context.go(AppRoutes.home),
                           style: ElevatedButton.styleFrom(
                               backgroundColor: primaryColor,
                               textStyle: TextStyle(color: backgroundColor),

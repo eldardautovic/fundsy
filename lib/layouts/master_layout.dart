@@ -1,38 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:fundsy/screens/bills_screen.dart';
-import 'package:fundsy/screens/buy_screen.dart';
-import 'package:fundsy/screens/home_screen.dart';
-import 'package:fundsy/screens/profile_screen.dart';
-import 'package:fundsy/screens/wallet_screen.dart';
+import 'package:fundsy/routes/routes.dart';
 import 'package:fundsy/utils/colors.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/navigation_provider.dart';
 
 class MasterLayout extends StatefulWidget {
-  const MasterLayout({super.key});
+  final StatefulNavigationShell navigationShell;
+
+  const MasterLayout(this.navigationShell, {super.key});
 
   @override
   State<MasterLayout> createState() => _MasterLayoutState();
 }
 
 class _MasterLayoutState extends State<MasterLayout> {
-  final List<Widget> _screens = [
-    HomeScreen(),
-    BillsScreen(),
-    BuyScreen(),
-    WalletScreen(),
-    ProfileScreen(),
-  ];
-
   @override
   Widget build(BuildContext context) {
     final navigationProvider = Provider.of<NavigationProvider>(context);
 
     return Scaffold(
         body: Container(
-            margin: EdgeInsets.all(24),
-            child: _screens[navigationProvider.currentIndex]),
+            margin: EdgeInsets.all(24), child: widget.navigationShell),
         bottomNavigationBar: Theme(
           data: Theme.of(context).copyWith(
             canvasColor: secondaryColor,
@@ -47,8 +37,8 @@ class _MasterLayoutState extends State<MasterLayout> {
             type: BottomNavigationBarType.fixed,
             selectedLabelStyle: TextStyle(color: textColor),
             unselectedLabelStyle: TextStyle(color: textColor),
-            currentIndex: navigationProvider.currentIndex,
-            onTap: (index) => navigationProvider.setCurrentIndex(index),
+            currentIndex: widget.navigationShell.currentIndex,
+            onTap: _onTap,
             items: _buildNavItems(navigationProvider.currentIndex),
           ),
         ));
@@ -62,7 +52,9 @@ class _MasterLayoutState extends State<MasterLayout> {
       BottomNavigationBarItem(
         icon: Container(
           decoration: BoxDecoration(
-            color: currentIndex == 2 ? primaryColor : textColor,
+            color: widget.navigationShell.currentIndex == AppRoutes.buyIndex
+                ? primaryColor
+                : textColor,
             borderRadius: BorderRadius.circular(100),
           ),
           child: Padding(
@@ -77,5 +69,12 @@ class _MasterLayoutState extends State<MasterLayout> {
       BottomNavigationBarItem(
           icon: Icon(Icons.person_rounded), label: 'Profile'),
     ];
+  }
+
+  void _onTap(index) {
+    widget.navigationShell.goBranch(
+      index,
+      initialLocation: index == widget.navigationShell.currentIndex,
+    );
   }
 }

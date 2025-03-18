@@ -48,27 +48,27 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Fundsy',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          hoverColor: Colors.transparent,
-          unselectedWidgetColor: secondaryColor,
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: primaryColor,
-            primary: primaryColor,
-            secondary: secondaryColor,
-            surface: backgroundColor,
-          ),
-          textTheme: Theme.of(context).textTheme.apply(
-                bodyColor: textColor,
-                displayColor: textColor,
-                fontFamily: "Inter",
-              ),
-          useMaterial3: true,
+    return MaterialApp.router(
+      title: 'Fundsy',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        hoverColor: Colors.transparent,
+        unselectedWidgetColor: secondaryColor,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: primaryColor,
+          primary: primaryColor,
+          secondary: secondaryColor,
+          surface: backgroundColor,
         ),
-        initialRoute: getInitialPage(),
-        routes: routes);
+        textTheme: Theme.of(context).textTheme.apply(
+              bodyColor: textColor,
+              displayColor: textColor,
+              fontFamily: "Inter",
+            ),
+        useMaterial3: true,
+      ),
+      routerConfig: router,
+    );
   }
 
   String getInitialPage() => AppRoutes.onBoarding;
