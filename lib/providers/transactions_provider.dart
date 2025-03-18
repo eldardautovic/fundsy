@@ -47,7 +47,7 @@ class TransactionProvider {
       ORDER BY $columnCreatedAt DESC
     ''', [today]);
 
-    double spentToday = double.parse(total[0]['total'].toString());
+    double spentToday = double.tryParse(total[0]['total'].toString()) ?? 0;
 
     return spentToday;
   }
