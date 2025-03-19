@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fundsy/database/database.dart';
 import 'package:fundsy/providers/transactions_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +17,8 @@ class _AvailableBalanceDayState extends State<AvailableBalanceDay> {
   late double _spendAmount = 0.0;
   late TransactionProvider _transactionProvider;
 
+  bool isLowBalance = false;
+
   bool isLoading = true;
 
   @override
@@ -32,6 +35,9 @@ class _AvailableBalanceDayState extends State<AvailableBalanceDay> {
 
     setState(() {
       isLoading = false;
+
+      //TODO: Implement working logic, not a hardcoded threshold.
+      isLowBalance = user.balance < 10 ? true : false;
     });
   }
 
@@ -42,6 +48,31 @@ class _AvailableBalanceDayState extends State<AvailableBalanceDay> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if (isLowBalance) ...[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              spacing: 10,
+              children: [
+                Icon(
+                  Icons.warning_rounded,
+                  color: Colors.amber,
+                  size: 35,
+                ),
+                Text(
+                  "Low balance, avoid payments.",
+                  style: TextStyle(
+                      fontFamily: "Bassa",
+                      fontWeight: FontWeight.w500,
+                      color: Colors.amber,
+                      fontSize: 15),
+                )
+              ],
+            ),
+          ],
+          SizedBox(
+            height: 15,
+          ),
           Text(
             "Money left to spend today:",
             style: TextStyle(fontFamily: "Bassa", fontSize: 15),
@@ -53,9 +84,7 @@ class _AvailableBalanceDayState extends State<AvailableBalanceDay> {
             height: 15,
             child: Positioned.fill(
               child: LinearProgressIndicator(
-                value: (widget.balancePerDay > 0.0 && _spendAmount > 0.0)
-                    ? _spendAmount / widget.balancePerDay
-                    : 0.0,
+                value: calculatePercentage(),
                 color: primaryColor,
                 backgroundColor: secondaryColor,
                 borderRadius: BorderRadius.circular(100),
@@ -78,9 +107,15 @@ class _AvailableBalanceDayState extends State<AvailableBalanceDay> {
                     color: textColor.withAlpha(230)),
               ),
             ],
-          ),
+          )
         ],
       ),
     );
+  }
+
+  double calculatePercentage() {
+    return (widget.balancePerDay > 0.0 && _spendAmount > 0.0)
+        ? _spendAmount / widget.balancePerDay
+        : 0.0;
   }
 }
