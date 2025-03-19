@@ -4,8 +4,6 @@
 
 ---
 
-## Fundsy  
-
 Fundsy is a powerful Flutter app to keep your finances organized and under control. Track your income, expenses, and savings effortlessly while staying on top of your financial goals.  
 
 ## Technologies used 
