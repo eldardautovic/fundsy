@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:fundsy/providers/bills_provider.dart';
+import 'package:fundsy/routes/routes.dart';
 import 'package:fundsy/utils/colors.dart';
 import 'package:fundsy/utils/constants.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class BillsCreateScreen extends StatefulWidget {
   const BillsCreateScreen({super.key});
@@ -12,6 +17,30 @@ class BillsCreateScreen extends StatefulWidget {
 
 class _BillsCreateScreenState extends State<BillsCreateScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
+  late BillsProvider _billsProvider;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _billsProvider = context.read<BillsProvider>();
+  }
+
+  Future<void> saveBill() async {
+    _formKey.currentState?.saveAndValidate();
+
+    if (_formKey.currentState?.isValid == true) {
+      await _billsProvider.insert({
+        'completed': 0,
+        'balance': _formKey.currentState?.value['balance'],
+        'category': _formKey.currentState?.value['category'],
+        'created_at': DateTime.now().toIso8601String()
+      });
+
+      context.replace(AppRoutes.bills);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,56 +49,86 @@ class _BillsCreateScreenState extends State<BillsCreateScreen> {
         child: FormBuilder(
             key: _formKey,
             child: Column(
-              children: [
-                FormBuilderDropdown<String>(
-                    name: 'category',
-                    hint: Text(
-                      "Select type",
-                      style: TextStyle(color: textColor),
-                    ),
-                    dropdownColor: secondaryColor,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: secondaryColor,
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: secondaryColor),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: secondaryColor),
-                      ),
-                      constraints: const BoxConstraints(
-                        minHeight: 80,
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 10),
-                    ),
-                    items: _buildDropdownItems()),
-                FormBuilderTextField(
-                  name: "balance",
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    fillColor: secondaryColor,
-                    filled: true,
-                    label: Text(
-                      "Amount",
-                      style: TextStyle(color: textColor),
-                    ),
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: secondaryColor),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: secondaryColor),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: secondaryColor),
-                    ),
-                  ),
-                )
-              ],
+              children: [..._buildFormInputs(), _save()],
             )),
       ),
     );
+  }
+
+  List<Widget> _buildFormInputs() {
+    return [
+      FormBuilderDropdown<String>(
+          name: 'category',
+          hint: Text(
+            "Select type",
+            style: TextStyle(color: textColor),
+          ),
+          validator: FormBuilderValidators.compose([
+            FormBuilderValidators.required(),
+          ]),
+          dropdownColor: secondaryColor,
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: secondaryColor,
+            border: OutlineInputBorder(
+              borderSide: BorderSide(color: secondaryColor),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: secondaryColor),
+            ),
+            constraints: const BoxConstraints(
+              minHeight: 80,
+            ),
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          ),
+          items: _buildDropdownItems()),
+      FormBuilderTextField(
+        name: "balance",
+        keyboardType: TextInputType.number,
+        validator: FormBuilderValidators.compose(
+            [FormBuilderValidators.required(), FormBuilderValidators.float()]),
+        valueTransformer: (value) {
+          if (value != null) {
+            return double.tryParse(value);
+          }
+        },
+        decoration: InputDecoration(
+          fillColor: secondaryColor,
+          filled: true,
+          label: Text(
+            "Amount",
+            style: TextStyle(color: textColor),
+          ),
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: secondaryColor),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: secondaryColor),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: secondaryColor),
+          ),
+        ),
+      )
+    ];
+  }
+
+  Widget _save() {
+    return Container(
+        margin: EdgeInsets.only(top: 20),
+        child: ElevatedButton(
+          onPressed: saveBill,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: primaryColor,
+            textStyle: TextStyle(color: textColor),
+            foregroundColor: backgroundColor,
+            minimumSize: Size(MediaQuery.of(context).size.width, 50),
+            shadowColor: Colors.transparent,
+          ),
+          child: Text("Add a bill"),
+        ));
   }
 
   List<DropdownMenuItem<String>> _buildDropdownItems() {

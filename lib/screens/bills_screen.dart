@@ -30,13 +30,14 @@ class _BillsScreenState extends State<BillsScreen> {
     super.initState();
 
     _billsProvider = context.read<BillsProvider>();
-
     initBills();
   }
 
   Future initBills() async {
     _list = await _billsProvider.getBills();
     _leftoverBillsAmount = await _billsProvider.getLeftoverBillsAmount();
+
+    print(_leftoverBillsAmount);
 
     setState(() {
       isLoading = false;

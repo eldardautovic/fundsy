@@ -9,9 +9,6 @@ final String columnCompleted = 'completed';
 
 class Bill extends FinancialItem {
   int id = 0;
-  double balance = 0.0;
-  DateTime createdAt = DateTime.now();
-  String category = '';
   bool completed = false;
 
   Map<String, Object?> toMap() {
@@ -32,8 +29,8 @@ class Bill extends FinancialItem {
   Bill.fromMap(Map<String, Object?> map) {
     id = map[columnId] as int;
     balance = map[columnBalance] as double;
-    createdAt = DateTime.parse(map[columnCreatedAt] as String);
+    createdAt = createdAt;
     category = map[columnCategory] as String;
-    completed = map[columnCompleted] as bool;
+    completed = (map[columnCompleted] as int).isOdd;
   }
 }

@@ -68,7 +68,7 @@ class _TransactionItemState extends State<TransactionItem> {
                   ),
                   Text(
                     DateFormat('MMMM dd, hh:mm a')
-                        .format(widget.item.createdAt),
+                        .format(DateTime.parse(widget.item.createdAt)),
                     style: TextStyle(
                         fontFamily: "Bassa",
                         fontSize: 13,

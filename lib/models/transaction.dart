@@ -8,10 +8,6 @@ final String columnCategory = 'category';
 
 class Transaction extends FinancialItem {
   int id = 0;
-  double balance = 0.0;
-  DateTime createdAt = DateTime.now();
-  String category = '';
-
   Map<String, Object?> toMap() {
     var map = <String, Object?>{
       columnBalance: balance,
@@ -30,7 +26,7 @@ class Transaction extends FinancialItem {
   Transaction.fromMap(Map<String, Object?> map) {
     id = map[columnId] as int;
     balance = map[columnBalance] as double;
-    createdAt = DateTime.parse(map[columnCreatedAt] as String);
+    createdAt = map[columnCreatedAt] as String;
     category = map[columnCategory] as String;
   }
 }

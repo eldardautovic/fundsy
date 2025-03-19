@@ -9,8 +9,8 @@ final String columnCompleted = 'completed';
 final String columnCreatedAt = 'created_at';
 
 class BillsProvider {
-  Future<Bill> insert(Bill bill) async {
-    bill.id = await db!.database!.insert(tableBill, bill.toMap());
+  Future<dynamic> insert(dynamic bill) async {
+    await db!.database!.insert(tableBill, bill);
     return bill;
   }
 
@@ -45,9 +45,9 @@ class BillsProvider {
     var total = await db!.database!.rawQuery('''
       SELECT SUM(balance) as total 
       FROM $tableBill
-      WHERE date($columnCompleted) = ?
+      WHERE $columnCompleted = ?
       ORDER BY $columnCreatedAt DESC
-    ''', [1]);
+    ''', [0]);
 
     double leftoverAmount = double.tryParse(total[0]['total'].toString()) ?? 0;
 
