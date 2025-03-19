@@ -2,6 +2,12 @@
   <img src="https://github.com/user-attachments/assets/7b5461c5-8924-473d-8191-3c2cc5819c3d" alt="Fundsy Logo"/>
 </p>
 
+<p align="center">
+  <img src="https://img.shields.io/github/commit-activity/t/eldardautovic/fundsy" alt="Fundsy Logo"/>
+    <img src="https://img.shields.io/github/created-at/eldardautovic/fundsy" alt="Fundsy Logo"/>
+
+</p>
+
 ---
 
 Fundsy is a powerful Flutter app to keep your finances organized and under control. Track your income, expenses, and savings effortlessly while staying on top of your financial goals.  
