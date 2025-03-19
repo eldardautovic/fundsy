@@ -1,16 +1,24 @@
-# fundsy
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/7b5461c5-8924-473d-8191-3c2cc5819c3d" alt="Fundsy Logo"/>
+</p>
 
-A new Flutter project.
+---
 
-## Getting Started
+## Fundsy  
 
-This project is a starting point for a Flutter application.
+Fundsy is a powerful Flutter app to keep your finances organized and under control. Track your income, expenses, and savings effortlessly while staying on top of your financial goals.  
 
-A few resources to get you started if this is your first Flutter project:
+## Technologies used 
+- 🛠 Built with **Flutter**  
+- 📂 Uses **SQLite** for local storage  
+- 🎨 Beautiful and intuitive UI with [Figma](www.figma.com) 
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Features  
+- 📊 Track income, expenses, and savings  
+- 💾 Uses SQLite for offline data storage  
+- 🔔 Set financial reminders and alerts  
+- 📈 Gain insights with interactive reports  
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Video demonstration
+
+To be added.
