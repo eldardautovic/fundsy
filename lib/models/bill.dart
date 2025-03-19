@@ -15,7 +15,8 @@ class Bill extends FinancialItem {
     var map = <String, Object?>{
       columnBalance: balance,
       columnCreatedAt: createdAt,
-      columnCategory: category
+      columnCategory: category,
+      columnCompleted: completed ? 1 : 0
     };
     // ignore: unnecessary_null_comparison
     if (id != null) {

@@ -95,3 +95,27 @@ class Utilities {
     medicalHealthcare,
   ];
 }
+
+enum UtilityEnum {
+  housing('Housing', Icons.house),
+  utilities('Utilities', Icons.energy_savings_leaf),
+  groceries('Groceries', Icons.local_grocery_store),
+  transportation('Transportation', Icons.directions_car),
+  insurance('Insurance', Icons.save),
+  debtPayments('Debt Payments', Icons.credit_card),
+  medicalHealthcare('Medical & Healthcare', Icons.local_hospital);
+
+  const UtilityEnum(this.name, this.iconData);
+
+  final String name;
+  final IconData iconData;
+
+  Icon get icon => Icon(iconData, size: 18);
+
+  static UtilityEnum fromName(String name) {
+    return UtilityEnum.values.firstWhere(
+      (utility) => utility.name == name,
+      orElse: () => housing, // Vrati housing kao default
+    );
+  }
+}

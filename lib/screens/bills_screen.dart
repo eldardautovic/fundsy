@@ -37,8 +37,6 @@ class _BillsScreenState extends State<BillsScreen> {
     _list = await _billsProvider.getBills();
     _leftoverBillsAmount = await _billsProvider.getLeftoverBillsAmount();
 
-    print(_leftoverBillsAmount);
-
     setState(() {
       isLoading = false;
     });
@@ -90,15 +88,22 @@ class _BillsScreenState extends State<BillsScreen> {
 
     return Container(
       margin: EdgeInsets.only(top: 20),
-      child: Column(
-        children: _list
-            .map(
-              (e) => TransactionItem(
-                item: e,
-                checkable: true,
-              ),
-            )
-            .toList(),
+      child: Flexible(
+        child: SingleChildScrollView(
+          child: Column(
+            children: _list
+                .map(
+                  (e) => TransactionItem(
+                      key: Key(e.id.toString()),
+                      item: e,
+                      completed: e.completed,
+                      checkable: true,
+                      onComplete: () => initBills(),
+                      id: e.id),
+                )
+                .toList(),
+          ),
+        ),
       ),
     );
   }

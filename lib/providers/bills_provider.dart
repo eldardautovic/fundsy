@@ -1,5 +1,7 @@
+import 'package:fundsy/database/database.dart';
 import 'package:fundsy/main.dart';
 import 'package:fundsy/models/bill.dart';
+import 'package:fundsy/models/user.dart';
 
 final String tableBill = 'Bills';
 final String columnId = 'id';
@@ -14,9 +16,30 @@ class BillsProvider {
     return bill;
   }
 
-  Future<int> update(Bill bill) async {
-    return await db!.database!.update(tableBill, bill.toMap(),
-        where: '$columnId = ?', whereArgs: [bill.id]);
+  Future<int> update(Bill bill, int id) async {
+    await db!.database!.update(
+        tableUser,
+        {
+          columnBalance: bill.completed
+              ? user.balance - bill.balance
+              : user.balance + bill.balance
+        },
+        where: "id = ?",
+        whereArgs: [user.id]);
+
+    user.setBalance(bill.completed
+        ? user.balance - bill.balance
+        : user.balance + bill.balance);
+
+    return await db!.database!.update(
+        tableBill,
+        {
+          columnBalance: bill.balance,
+          columnCategory: bill.category,
+          columnCompleted: bill.completed ? 1 : 0,
+        },
+        where: '$columnId = ?',
+        whereArgs: [id]);
   }
 
   Future<List<Bill>> getBills() async {

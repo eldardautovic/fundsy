@@ -83,6 +83,7 @@ class _TransactionLogsState extends State<TransactionLogs> {
         ..._list.map((transact) => TransactionItem(
               item: transact,
               checkable: false,
+              id: transact.id,
             ))
       ],
     );

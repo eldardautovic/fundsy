@@ -1,19 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:fundsy/models/bill.dart';
 import 'package:fundsy/models/financial_item.dart';
+import 'package:fundsy/providers/bills_provider.dart';
+import 'package:fundsy/utils/constants.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../utils/colors.dart';
 
 class TransactionItem extends StatefulWidget {
   final bool checkable;
+
+  final int id;
   final FinancialItem item;
   final bool completed;
+  final Function? onComplete;
 
   const TransactionItem(
       {super.key,
       this.checkable = false,
       required this.item,
-      this.completed = false});
+      this.completed = false,
+      this.onComplete,
+      required this.id});
 
   @override
   State<TransactionItem> createState() => _TransactionItemState();
@@ -22,12 +31,30 @@ class TransactionItem extends StatefulWidget {
 class _TransactionItemState extends State<TransactionItem> {
   bool completed = false;
 
+  late BillsProvider _billsProvider;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
     completed = widget.completed;
+
+    _billsProvider = context.read<BillsProvider>();
+  }
+
+  Future<void> markAsCompleted(bool? value) async {
+    Bill tempBill = widget.item as Bill;
+
+    tempBill.completed = !widget.completed;
+
+    await _billsProvider.update(tempBill, widget.id);
+
+    widget.onComplete!();
+
+    setState(() {
+      completed = value ?? false;
+    });
   }
 
   @override
@@ -45,9 +72,16 @@ class _TransactionItemState extends State<TransactionItem> {
                   borderRadius: BorderRadius.circular(100),
                   color: primaryColor,
                 ),
-                child: const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Icon(Icons.fastfood_rounded),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Builder(builder: (context) {
+                    if (widget.item is Bill) {
+                      final bill = widget.item as Bill;
+                      final utility = UtilityEnum.fromName(bill.category);
+                      return utility.icon; // Koristimo utility.icon
+                    }
+                    return const Icon(Icons.error); // Default ikona
+                  }),
                 ),
               ),
               const SizedBox(width: 5),
@@ -104,8 +138,8 @@ class _TransactionItemState extends State<TransactionItem> {
                 Checkbox(
                   shape: const CircleBorder(),
                   checkColor: secondaryColor,
-                  value: widget.completed,
-                  side: BorderSide(width: 0),
+                  value: completed,
+                  side: const BorderSide(width: 0),
                   fillColor: WidgetStateColor.resolveWith(
                     (states) {
                       if (states.contains(WidgetState.selected)) {
@@ -116,9 +150,7 @@ class _TransactionItemState extends State<TransactionItem> {
                   ),
                   activeColor: primaryColor,
                   onChanged: (value) {
-                    setState(() {
-                      completed = value ?? false;
-                    });
+                    markAsCompleted(value);
                   },
                 ),
             ],
