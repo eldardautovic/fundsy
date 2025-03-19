@@ -5,6 +5,7 @@ class AppRoutes {
 
   static const bills = '/bills';
   static const addBill = 'add';
+  static const editBill = 'edit';
 
   static const buy = '/buy';
 

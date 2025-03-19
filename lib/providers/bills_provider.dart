@@ -16,7 +16,7 @@ class BillsProvider {
     return bill;
   }
 
-  Future<int> update(Bill bill, int id) async {
+  Future<int> complete(Bill bill, int id) async {
     await db!.database!.update(
         tableUser,
         {
@@ -37,6 +37,18 @@ class BillsProvider {
           columnBalance: bill.balance,
           columnCategory: bill.category,
           columnCompleted: bill.completed ? 1 : 0,
+        },
+        where: '$columnId = ?',
+        whereArgs: [id]);
+  }
+
+  Future<int> update(Map<String, dynamic> bill, int id) async {
+    return await db!.database!.update(
+        tableBill,
+        {
+          columnBalance: bill[columnBalance],
+          columnCategory: bill[columnCategory],
+          columnCompleted: bill[columnCompleted],
         },
         where: '$columnId = ?',
         whereArgs: [id]);

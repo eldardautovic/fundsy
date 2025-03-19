@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fundsy/layouts/master_layout.dart';
+import 'package:fundsy/models/bill.dart';
 import 'package:fundsy/screens/bills_create_screen.dart';
 import 'package:fundsy/screens/bills_screen.dart';
 import 'package:fundsy/screens/buy_screen.dart';
@@ -42,6 +43,18 @@ final router = GoRouter(
                   path: AppRoutes.addBill,
                   name: AppRoutes.addBill,
                   builder: (context, state) => BillsCreateScreen(),
+                ),
+                GoRoute(
+                  path: AppRoutes.editBill,
+                  name: AppRoutes.editBill,
+                  builder: (context, state) {
+                    Bill extra = state.extra as Bill;
+
+                    return BillsCreateScreen(
+                      bill: extra,
+                      id: extra.id,
+                    );
+                  },
                 ),
               ],
             ),
