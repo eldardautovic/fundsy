@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fundsy/models/bill.dart';
 import 'package:fundsy/models/financial_item.dart';
+import 'package:fundsy/models/transaction.dart';
 import 'package:fundsy/providers/bills_provider.dart';
 import 'package:fundsy/routes/routes.dart';
 import 'package:fundsy/utils/constants.dart';
@@ -96,8 +97,12 @@ class _TransactionItemState extends State<TransactionItem> {
                         final bill = widget.item as Bill;
                         final utility = UtilityEnum.fromName(bill.category);
                         return utility.icon; // Koristimo utility.icon
+                      } else {
+                        final transaction = widget.item as Transaction;
+                        final category =
+                            CategoryEnum.fromName(transaction.category);
+                        return category.icon; // Koristimo utility.icon
                       }
-                      return const Icon(Icons.error); // Default ikona
                     }),
                   ),
                 ),

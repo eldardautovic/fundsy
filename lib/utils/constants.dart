@@ -119,3 +119,27 @@ enum UtilityEnum {
     );
   }
 }
+
+enum CategoryEnum {
+  diningOut('Dining Out', Icons.fastfood),
+  entertainment('Entertainment', Icons.theater_comedy),
+  shopping('Shopping', Icons.shopping_bag),
+  subscriptions('Subscriptions & Memberships', Icons.card_membership),
+  travelVacation('Travel & Vacation', Icons.airplanemode_active),
+  giftsDonations('Gifts & Donations', Icons.card_giftcard),
+  personalCare('Personal Care', Icons.brush);
+
+  const CategoryEnum(this.name, this.iconData);
+
+  final String name;
+  final IconData iconData;
+
+  Icon get icon => Icon(iconData, size: 18);
+
+  static CategoryEnum fromName(String name) {
+    return CategoryEnum.values.firstWhere(
+      (category) => category.name == name,
+      orElse: () => diningOut, // Default vrijednost
+    );
+  }
+}
