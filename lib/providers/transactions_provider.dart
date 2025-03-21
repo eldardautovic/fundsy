@@ -1,5 +1,7 @@
+import 'package:fundsy/database/database.dart';
 import 'package:fundsy/main.dart';
 import 'package:fundsy/models/transaction.dart';
+import 'package:fundsy/models/user.dart';
 import 'package:intl/intl.dart';
 
 final String tableTransaction = 'Transactions';
@@ -9,9 +11,15 @@ final String columnCreatedAt = 'created_at';
 final String columnCategory = 'category';
 
 class TransactionProvider {
-  Future<Transaction> insert(Transaction transaction) async {
-    transaction.id =
-        await db!.database!.insert(tableTransaction, transaction.toMap());
+  Future<Map<String, dynamic>> insert(dynamic transaction) async {
+    await db!.database!.insert(tableTransaction, transaction);
+
+    await db!.database!.update(
+        tableUser, {columnBalance: user.balance - transaction['balance']},
+        where: "id = ?", whereArgs: [user.id]);
+
+    user.setBalance(user.balance - transaction['balance']);
+
     return transaction;
   }
 

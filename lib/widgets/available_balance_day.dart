@@ -43,7 +43,7 @@ class _AvailableBalanceDayState extends State<AvailableBalanceDay> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (isLowBalance) ...[
+          if (isLowBalance || _spendAmount > widget.balancePerDay) ...[
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -54,8 +54,10 @@ class _AvailableBalanceDayState extends State<AvailableBalanceDay> {
                   size: 35,
                 ),
                 const SizedBox(width: 10),
-                const Text(
-                  "Low balance, avoid payments.",
+                Text(
+                  isLowBalance
+                      ? "Low balance, avoid payments."
+                      : "You spent your daily spending balance.",
                   style: TextStyle(
                     fontFamily: "Bassa",
                     fontWeight: FontWeight.w500,
@@ -76,7 +78,9 @@ class _AvailableBalanceDayState extends State<AvailableBalanceDay> {
             height: 15,
             child: LinearProgressIndicator(
               value: calculatePercentage(),
-              color: primaryColor,
+              color: _spendAmount > widget.balancePerDay
+                  ? errorColor
+                  : primaryColor,
               backgroundColor: secondaryColor,
               borderRadius: BorderRadius.circular(100),
             ),
