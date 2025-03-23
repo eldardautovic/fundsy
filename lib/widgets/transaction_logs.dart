@@ -7,7 +7,8 @@ import 'package:provider/provider.dart';
 import '../utils/colors.dart';
 
 class TransactionLogs extends StatefulWidget {
-  const TransactionLogs({super.key});
+  final bool areAllIncluded;
+  const TransactionLogs({super.key, this.areAllIncluded = false});
 
   @override
   State<TransactionLogs> createState() => _TransactionLogsState();
@@ -30,7 +31,7 @@ class _TransactionLogsState extends State<TransactionLogs> {
   }
 
   Future<void> initLogs() async {
-    _list = await _transactionProvider.getTransactions();
+    _list = await _transactionProvider.getTransactions(widget.areAllIncluded);
 
     setState(() {
       isLoading = false;
@@ -54,7 +55,7 @@ class _TransactionLogsState extends State<TransactionLogs> {
   }
 
   Widget _buildHeader() {
-    return const Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -63,16 +64,17 @@ class _TransactionLogsState extends State<TransactionLogs> {
           style: TextStyle(
               fontFamily: "Bassa", fontSize: 15, fontWeight: FontWeight.w500),
         ),
-        Text(
-          "See all",
-          style: TextStyle(
-              fontFamily: "Bassa",
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: primaryColor,
-              decoration: TextDecoration.underline,
-              decorationColor: primaryColor),
-        ),
+        if (widget.areAllIncluded == false)
+          Text(
+            "See all",
+            style: TextStyle(
+                fontFamily: "Bassa",
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: primaryColor,
+                decoration: TextDecoration.underline,
+                decorationColor: primaryColor),
+          ),
       ],
     );
   }

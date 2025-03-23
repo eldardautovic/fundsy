@@ -90,7 +90,7 @@ class _AvailableBalanceDayState extends State<AvailableBalanceDay> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                "\$$_spendAmount/\$${widget.balancePerDay.toStringAsFixed(2)}",
+                "\$${widget.balancePerDay <= 0 ? "0.00" : _spendAmount}/\$${widget.balancePerDay <= 0 ? "0.00" : widget.balancePerDay.toStringAsFixed(2)}",
                 textAlign: TextAlign.right,
                 style: TextStyle(
                   fontFamily: "Bassa",

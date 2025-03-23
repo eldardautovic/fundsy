@@ -28,11 +28,11 @@ class TransactionProvider {
         where: '$columnId = ?', whereArgs: [transaction.id]);
   }
 
-  Future<List<Transaction>> getTransactions() async {
+  Future<List<Transaction>> getTransactions(bool areAllIncluded) async {
     List<Map<String, Object?>> maps = await db!.database!.query(
       tableTransaction,
       columns: [columnId, columnBalance, columnCategory, columnCreatedAt],
-      limit: 4,
+      limit: areAllIncluded ? null : 4,
       orderBy: '$columnCreatedAt DESC',
     );
 
