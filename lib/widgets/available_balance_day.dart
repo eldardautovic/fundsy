@@ -29,7 +29,6 @@ class _AvailableBalanceDayState extends State<AvailableBalanceDay> {
     super.initState();
     _transactionProvider = context.read<TransactionProvider>();
     _subscription = _transactionProvider.onTransactionsChanged.listen((_) {
-      // Refresh transactions when the stream emits
       _refreshTransactions();
     });
 
@@ -42,6 +41,12 @@ class _AvailableBalanceDayState extends State<AvailableBalanceDay> {
     setState(() {
       isLoading = false;
     });
+  }
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
   }
 
   @override

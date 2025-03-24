@@ -33,14 +33,10 @@ class _TransactionLogsState extends State<TransactionLogs> {
 
     _transactionProvider = context.read<TransactionProvider>();
     _subscription = _transactionProvider.onTransactionsChanged.listen((_) {
-      // Refresh transactions when the stream emits
       _refreshTransactions();
     });
 
-    // Initial load
     _refreshTransactions();
-
-    initLogs();
   }
 
   void _refreshTransactions() async {
@@ -48,20 +44,13 @@ class _TransactionLogsState extends State<TransactionLogs> {
         await TransactionProvider().getTransactions(widget.areAllIncluded);
     setState(() {
       _list = transactions;
-    });
-  }
-
-  Future<void> initLogs() async {
-    _list = await _transactionProvider.getTransactions(widget.areAllIncluded);
-
-    setState(() {
       isLoading = false;
     });
   }
 
   @override
   void dispose() {
-    _subscription.cancel(); // Don't forget to cancel subscription
+    _subscription.cancel();
     super.dispose();
   }
 
