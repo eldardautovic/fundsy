@@ -13,13 +13,17 @@ class WalletScreen extends StatefulWidget {
 class _WalletScreenState extends State<WalletScreen> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        HeaderWidget(title: "Wallet", description: "Your personal wallet."),
-        WalletInformation(),
-        TransactionLogs(areAllIncluded: true)
-      ],
+    return Flexible(
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            HeaderWidget(title: "Wallet", description: "Your personal wallet."),
+            WalletInformation(),
+            TransactionLogs(areAllIncluded: true)
+          ],
+        ),
+      ),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:fundsy/main.dart';
 import 'package:fundsy/models/transaction.dart';
 import 'package:fundsy/models/user.dart';
 import 'package:intl/intl.dart';
+import 'dart:async';
 
 final String tableTransaction = 'Transactions';
 final String columnId = 'id';
@@ -11,6 +12,12 @@ final String columnCreatedAt = 'created_at';
 final String columnCategory = 'category';
 
 class TransactionProvider {
+  // Stream controller to notify listeners when transactions change
+  final _transactionController = StreamController<void>.broadcast();
+
+  // Stream that widgets can listen to
+  Stream<void> get onTransactionsChanged => _transactionController.stream;
+
   Future<Map<String, dynamic>> insert(dynamic transaction) async {
     await db!.database!.insert(tableTransaction, transaction);
 
@@ -20,12 +27,21 @@ class TransactionProvider {
 
     user.setBalance(user.balance - transaction['balance']);
 
+    // Notify listeners that transactions have changed
+    _transactionController.add(null);
+
     return transaction;
   }
 
   Future<int> update(Transaction transaction) async {
-    return await db!.database!.update(tableTransaction, transaction.toMap(),
+    final result = await db!.database!.update(
+        tableTransaction, transaction.toMap(),
         where: '$columnId = ?', whereArgs: [transaction.id]);
+
+    // Notify listeners that transactions have changed
+    _transactionController.add(null);
+
+    return result;
   }
 
   Future<List<Transaction>> getTransactions(bool areAllIncluded) async {
@@ -58,6 +74,11 @@ class TransactionProvider {
     double spentToday = double.tryParse(total[0]['total'].toString()) ?? 0;
 
     return spentToday;
+  }
+
+  // Dispose the controller when no longer needed
+  void dispose() {
+    _transactionController.close();
   }
 
   Future close() async => db!.database!.close();

@@ -10,6 +10,7 @@ class AppRoutes {
   static const buy = '/buy';
 
   static const wallet = '/wallet';
+  static const adjustBalance = 'balance';
 
   static const profile = '/profile';
 

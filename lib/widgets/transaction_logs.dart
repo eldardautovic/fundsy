@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:fundsy/models/transaction.dart';
 import 'package:fundsy/providers/transactions_provider.dart';
+import 'package:fundsy/routes/routes.dart';
 import 'package:fundsy/widgets/transaction_item.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../utils/colors.dart';
@@ -17,6 +21,8 @@ class TransactionLogs extends StatefulWidget {
 class _TransactionLogsState extends State<TransactionLogs> {
   late TransactionProvider _transactionProvider;
 
+  late StreamSubscription _subscription;
+
   late List<Transaction> _list;
 
   bool isLoading = true;
@@ -26,8 +32,23 @@ class _TransactionLogsState extends State<TransactionLogs> {
     super.initState();
 
     _transactionProvider = context.read<TransactionProvider>();
+    _subscription = _transactionProvider.onTransactionsChanged.listen((_) {
+      // Refresh transactions when the stream emits
+      _refreshTransactions();
+    });
+
+    // Initial load
+    _refreshTransactions();
 
     initLogs();
+  }
+
+  void _refreshTransactions() async {
+    final transactions =
+        await TransactionProvider().getTransactions(widget.areAllIncluded);
+    setState(() {
+      _list = transactions;
+    });
   }
 
   Future<void> initLogs() async {
@@ -36,6 +57,12 @@ class _TransactionLogsState extends State<TransactionLogs> {
     setState(() {
       isLoading = false;
     });
+  }
+
+  @override
+  void dispose() {
+    _subscription.cancel(); // Don't forget to cancel subscription
+    super.dispose();
   }
 
   @override
@@ -65,15 +92,20 @@ class _TransactionLogsState extends State<TransactionLogs> {
               fontFamily: "Bassa", fontSize: 15, fontWeight: FontWeight.w500),
         ),
         if (widget.areAllIncluded == false)
-          Text(
-            "See all",
-            style: TextStyle(
-                fontFamily: "Bassa",
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: primaryColor,
-                decoration: TextDecoration.underline,
-                decorationColor: primaryColor),
+          GestureDetector(
+            onTap: () {
+              context.go(AppRoutes.wallet);
+            },
+            child: Text(
+              "See all",
+              style: TextStyle(
+                  fontFamily: "Bassa",
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: primaryColor,
+                  decoration: TextDecoration.underline,
+                  decorationColor: primaryColor),
+            ),
           ),
       ],
     );

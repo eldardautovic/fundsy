@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:fundsy/models/user.dart';
 import 'package:fundsy/providers/transactions_provider.dart';
@@ -15,17 +17,27 @@ class AvailableBalanceDay extends StatefulWidget {
 
 class _AvailableBalanceDayState extends State<AvailableBalanceDay> {
   late double _spendAmount = 0.0;
+
+  late StreamSubscription _subscription;
+
+  late TransactionProvider _transactionProvider;
+
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    calculateDailySpending();
+    _transactionProvider = context.read<TransactionProvider>();
+    _subscription = _transactionProvider.onTransactionsChanged.listen((_) {
+      // Refresh transactions when the stream emits
+      _refreshTransactions();
+    });
+
+    _refreshTransactions();
   }
 
-  Future<void> calculateDailySpending() async {
-    final transactionProvider = context.read<TransactionProvider>();
-    _spendAmount = await transactionProvider.getDailyTransactions();
+  void _refreshTransactions() async {
+    _spendAmount = await _transactionProvider.getDailyTransactions();
 
     setState(() {
       isLoading = false;

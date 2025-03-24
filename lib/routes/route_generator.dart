@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fundsy/layouts/master_layout.dart';
 import 'package:fundsy/models/bill.dart';
+import 'package:fundsy/screens/adjust_balance_screen.dart';
 import 'package:fundsy/screens/bills_create_screen.dart';
 import 'package:fundsy/screens/bills_screen.dart';
 import 'package:fundsy/screens/buy_screen.dart';
@@ -71,9 +72,15 @@ final router = GoRouter(
         StatefulShellBranch(
           routes: <RouteBase>[
             GoRoute(
-              path: AppRoutes.wallet,
-              builder: (context, state) => WalletScreen(),
-            ),
+                path: AppRoutes.wallet,
+                builder: (context, state) => WalletScreen(),
+                routes: <RouteBase>[
+                  GoRoute(
+                    path: AppRoutes.adjustBalance,
+                    name: AppRoutes.adjustBalance,
+                    builder: (context, state) => AdjustBalanceScreen(),
+                  ),
+                ]),
           ],
         ),
         StatefulShellBranch(
